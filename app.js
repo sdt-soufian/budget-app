@@ -80,6 +80,7 @@ tbody.addEventListener('click', (e) => {
     let getValue = Operations(id);
     DOMmanip(getValue);
     deleteItem(id);
+    e.target.parentElement.parentElement.remove();
   }
 
   else if (e.target.classList[1] == "edit-color") {
@@ -93,6 +94,7 @@ tbody.addEventListener('click', (e) => {
     let getValue = Operations(id);
     DOMmanip(getValue);
     deleteItem(id);
+    e.target.parentElement.parentElement.remove();
   }
 })
 
