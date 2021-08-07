@@ -1,86 +1,124 @@
-var inputBudget = document.getElementById('budget');
-var btn_calculate = document.getElementById('btn-budget');
-var inputText = document.getElementById('expense-text');
-var inputAmount = document.getElementById('Amount');
-var btn_expense = document.getElementById('btn-expense');
-var tab = document.querySelector('table');
-var title_budget = document.getElementById('budget-price');
-var title_expence = document.getElementById('expences-price');
-var title_balance = document.getElementById('balance-price');
-var message = document.querySelector('.msg-error');
-var tbody = document.createElement('tbody');
+/**
+ * Whenever you try to fetch a DOM element, the lookup goes through the whole DOM tree!
+ * TODO: Optimize the lookup operation with a mechanism of your choosing.
+ */
+var inputBudget = document.getElementById("budget");
+var btn_calculate = document.getElementById("btn-budget");
+var inputText = document.getElementById("expense-text");
+var inputAmount = document.getElementById("Amount");
+var btn_expense = document.getElementById("btn-expense");
+var tbody = document.getElementById('tab-body');
+var title_budget = document.getElementById("budget-price");
+var title_expence = document.getElementById("expences-price");
+var title_balance = document.getElementById("balance-price");
+var message = document.querySelector(".msg-error");
 var pExpence = 0;
-var pBalance = null;
+var tabItems = [];
 
-//Ecouter le événements
-btn_calculate.addEventListener('click', budgetCalculate);
-btn_expense.addEventListener('click', expenseCalculate);
+//Ecoutez les événements
+btn_calculate.addEventListener("click", budgetCalculate);
+btn_expense.addEventListener("click", expenseCalculate);
 
 //Les fonctions
 function budgetCalculate(e) {
-    e.preventDefault();
-    if (inputBudget.value == '' || inputBudget.value < 0) {
-        inputBudget.style.borderColor = 'red';
-        message.classList.add('msg-show');
-        setTimeout(() => {
-            inputBudget.style.borderColor = '#308818';
-            message.classList.remove('msg-show');
-        }, 4000)
-    }
-    else {
-        
-        title_budget.textContent = inputBudget.value;
-        title_balance.textContent = inputBudget.value;
-    }
-
+  e.preventDefault();
+  if (inputBudget.value == "" || inputBudget.value < 0) {
+    inputBudget.style.borderColor = "red";
+    message.classList.add("msg-show");
+    message.innerHTML = "Error Budget doit etre positive et superieur a zero";
+    setTimeout(() => {
+      inputBudget.style.borderColor = "#308818";
+      message.classList.remove("msg-show");
+    }, 4000);
+  } else {
+    title_budget.textContent = inputBudget.value;
+    title_balance.textContent = inputBudget.value;
+    inputBudget.value = "";
+  }
 }
 
 function expenseCalculate(e) {
-    e.preventDefault();
-    var tabINfo = [
-        inputText.value,
-        inputAmount.value
-    ];
-    pExpence += parseInt(tabINfo[1]);
+  e.preventDefault();
+  if (inputAmount.value == "" || inputAmount.value < 0 || inputText.value == " ") {
+    message.classList.add("msg-show");
+    message.innerHTML = "text or value invalid";
+    setTimeout(() => {
+      message.classList.remove("msg-show");
+    }, 3500);
+  }
+  else {
+    pExpence += parseInt(inputAmount.value);
     title_expence.textContent = pExpence;
-    title_balance.textContent = (parseInt(title_balance.textContent) - parseInt(tabINfo[1])).toString();
-    var tr = document.createElement('tr');
-    tabINfo.forEach(elet => {
-        var td = document.createElement('td');
-        td.textContent = elet;
-        tr.appendChild(td);
-    })
-    var td = document.createElement('td');
-    var btn_edit = document.createElement('button');
-    btn_edit.classList.add('btn-style', 'edit-color');
-    btn_edit.addEventListener('click', editRow);
-    btn_edit.innerHTML = '<i class="fas fa-edit"></i>';
-    var btn_delete = document.createElement('button');
-    btn_delete.classList.add('btn-style', 'delete-color');
-    btn_delete.addEventListener('click', deleteRow);
-    btn_delete.innerHTML = '<i class="fas fa-trash"></i>';
-    td.appendChild(btn_edit);
-    td.appendChild(btn_delete);
-    tr.appendChild(td);
+    title_balance.textContent = (
+      parseInt(title_balance.textContent) - parseInt(inputAmount.value)
+    ).toString();
+    let objItems = {
+      id: Math.floor(Math.random() * 200),
+      titre: inputText.value,
+      valeur: inputAmount.value
+    }
+    tabItems.push(objItems);
+    localStorage.setItem('budgetInfo', JSON.stringify(tabItems));
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+    <td>${objItems.titre}</td>
+    <td>${objItems.valeur}</td>
+    <td>
+        <button value="${objItems.id}" class="btn-style edit-color"><i class="fas fa-edit"></i></button>
+        <button value="${objItems.id}" class="btn-style delete-color"><i class="fas fa-trash"></i></button>
+    </td>`
     tbody.appendChild(tr);
-    tab.appendChild(tbody);
-    inputText.value = ' ';
-    inputAmount.value = '';
+    inputText.value = " ";
+    inputAmount.value = "";
+  }
+
 }
 
-function deleteRow(e) {
-    let price = e.target.parentElement.previousSibling.textContent;
-    title_expence.textContent = `${pExpence -= price}`;
-    title_balance.textContent = (parseInt(title_balance.textContent) + parseInt(price)).toString();
+tbody.addEventListener('click', (e) => {
+  if (e.target.classList[1] == "delete-color") {
+    let id = e.target.getAttribute('value');
+    let getValue = Operations(id);
+    DOMmanip(getValue);
+    deleteItem(id);
     e.target.parentElement.parentElement.remove();
+  }
+
+  else if (e.target.classList[1] == "edit-color") {
+    //affichage des valeurs
+    inputText.value =
+      e.target.parentElement.parentElement.children[0].textContent;
+    inputAmount.value = parseInt(
+      e.target.parentElement.parentElement.children[1].textContent
+    );
+    let id = e.target.getAttribute('value');
+    let getValue = Operations(id);
+    DOMmanip(getValue);
+    deleteItem(id);
+    e.target.parentElement.parentElement.remove();
+  }
+})
+
+function Operations(id) {
+  console.log(tabItems);
+  let valeur = tabItems.filter(elet => elet.id == id);
+  return valeur[0].valeur;
 }
 
-function editRow(e) {
-    inputText.value = e.target.parentElement.parentElement.children[0].textContent;
-    inputAmount.value = parseInt(e.target.parentElement.parentElement.children[1].textContent);
-    let price = e.target.parentElement.previousSibling.textContent;
-    title_expence.textContent = `${pExpence -= price}`;
-    title_balance.textContent = (parseInt(title_balance.textContent) + parseInt(price)).toString();
-    e.target.parentElement.parentElement.remove();
+function DOMmanip(val) {
+  let pBalance = parseInt(title_balance.textContent);
+  pExpence -= parseInt(val);
+  title_expence.textContent = pExpence;
+  pBalance += parseInt(val);
+  title_balance.textContent = pBalance.toString();
 }
+
+function deleteItem(indice){
+  let tempTab = (JSON.parse(localStorage.getItem('budgetInfo'))).filter( elet => elet.id != indice); 
+  tabItems = tempTab;
+  localStorage.setItem('budgetInfo', JSON.stringify(tabItems));
+}
+
+
+
+
 
