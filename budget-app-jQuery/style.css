@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+body{
+    font-family: 'Lato', sans-serif;
+    background-color: #f3f3f3;
+}
+h2{
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #292b2c;
+    margin-bottom: 8px;
+    padding-left: 12px;
+}
+form input[type='number'], form input[type='text']{
+    display: inline-block;
+    width: 100%;
+    outline: none;
+    border: 0;
+    padding: 12px;
+    margin: 10px 0px;
+    background-color: white;
+}
+.conteneur{
+    padding: 12px;
+}
+.div-form1, .div-form2{
+    padding: 15px;
+    border: 2px solid;
+    margin: 12px;
+    border-radius: 6px;
+}
+.div-form1 input[type='number']{
+    border: 1px solid #308818;
+    border-radius: 6px;
+}
+.div-form2 input[type='number'], .div-form2 input[type='text']{
+    border: 1px solid #a4072a;
+    border-radius: 6px;
+}
+#btn-budget, #btn-expense{
+    display: inline-block;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 10px;
+    transform: scale(1);
+    transition: all 0.5s ease;
+}
+#btn-budget, .div-form1{
+    border-color: #308818;
+}
+#btn-expense, .div-form2{
+    border-color: #a4072a;
+}
+#btn-budget, #budget-price{
+    color: #308818;
+}
+#btn-expense, #expences-price{
+    color: #a4072a;
+}
+#btn-budget:hover{
+    background-color: #308818;
+    color: #292b2c;
+    transform: scale(0.95);
+}
+#btn-expense:hover{
+    background-color: #a4072a;
+    color: #292b2c;
+    transform: scale(0.95);
+}
+.flex{
+    display: flex;
+}
+.icon{
+    color: #114191;
+    text-align: center;
+    padding: 10px 0px;
+}
+.carte{
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex: 1 1 33.33%;
+}
+.cartes{
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 20px 0px; 
+}
+table{
+    width: 100%;
+    
+    border-collapse: collapse;
+}
+th, td{
+    padding: 10px;
+    text-align: center;
+   
+}
+.fas ,.fa-edit, .fas, .fa-trash{
+    pointer-events: none;
+}
+.btn-style{
+    border: 0;
+    background-color: transparent;
+    padding: 8px;
+    outline: none;
+    cursor: pointer;
+}
+.delete-color{
+    color: #ff3b30;
+}
+.edit-color{
+    color: #5856d6;
+}
+.anim-delete{
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+/*message d'error style*/
+.msg-error{
+    display: none;
+    /*background-color: #ffa3a6;*/
+    color: red;
+    padding: 16px;
+    text-align: center;
+}
+.msg-show{
+    display: block;
+}
+@media (min-width: 920px){
+    .conteneur{
+        display: flex;
+    }
+    .information{
+        flex: 1 1 30%;
+    }
+    .services{
+        flex: 1 1 70%;
+    }
+}

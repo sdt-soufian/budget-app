@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Budget App</title>
+</head>
+
+<body>
+    <div class="conteneur">
+        <div class="information">
+            <h2>budget app</h2>
+            <span class="msg-error">Error Budget doit etre positive et superieur a zero</span>
+            <div class="div-form1">
+                <form>btn-budget
+                    <label>Please Enter Your Budget</label>
+                    <input type="number" name="inputNbr" id="budget">
+                    <button id="">Calculate</button>
+                </form>
+            </div>
+            <div class="div-form2">
+                <form>
+                    <label>Please Enter Your Expense</label>
+                    <input type="text" name="" id="expense-text">
+                    <label>Please Enter Expense Amount</label>
+                    <input type="number" name="" id="Amount">
+                    <button id="btn-expense">Add Expense</button>
+                </form>
+            </div>
+        </div>
+        <div class="services">
+            <div class="cartes flex">
+                <div class="carte flex">
+                    <h4>BUDGET</h4>
+                    <div class="icon"><i class="fas fa-money-bill-alt fa-2x"></i></div>
+                    <h3 id="budget-price">0</h3>
+                </div>
+                <div class="carte flex">
+                    <h4>EXPENCES</h4>
+                    <div class="icon"><i class="far fa-credit-card fa-2x"></i></div>
+                    <h3 id="expences-price">0</h3>
+                </div>
+                <div class="carte flex">
+                    <h4>BALANCE</h4>
+                    <div class="icon"><i class="fas fa-dollar-sign fa-2x"></i></div>
+                    <h3 id="balance-price">0</h3>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <th>Expences Title</th>
+                    <th>Expence Value</th>
+                    <th>Operations</th>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
