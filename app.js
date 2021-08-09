@@ -82,7 +82,6 @@ tbody.addEventListener('click', (e) => {
     deleteItem(id);
     e.target.parentElement.parentElement.remove();
   }
-
   else if (e.target.classList[1] == "edit-color") {
     //affichage des valeurs
     inputText.value =
@@ -117,8 +116,3 @@ function deleteItem(indice){
   tabItems = tempTab;
   localStorage.setItem('budgetInfo', JSON.stringify(tabItems));
 }
-
-
-
-
-
