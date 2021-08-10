@@ -33,6 +33,7 @@ $(window).on('load', function () {
             msgError.toggle();
         }
         else {
+            $('#expences-price').text($('#Amount').val());
             const tr = $('<tr>');
             const chaine = `
     <td>${$('#expense-text').val()}</td>
@@ -47,7 +48,12 @@ $(window).on('load', function () {
 
     })
     $('tbody').on('click', 'button', function(){
-        $(this).hasClass('edit-color') ? console.log($(this).parents()) : console.log('faux');;
+        if($(this).hasClass('edit-color')){
+            console.log($(this).attr('value'));
+        }
+        else if($(this).hasClass('delete-color')){
+            console.log($(this).attr('value'));
+        }
     })
 
 })
