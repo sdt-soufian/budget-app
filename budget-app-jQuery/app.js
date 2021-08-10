@@ -46,5 +46,8 @@ $(window).on('load', function () {
         }
 
     })
+    $('tbody').on('click', 'button', function(){
+        $(this).hasClass('edit-color') ? console.log($(this).parents()) : console.log('faux');;
+    })
 
 })
