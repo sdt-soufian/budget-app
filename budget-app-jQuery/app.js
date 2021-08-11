@@ -1,5 +1,8 @@
 $(window).on('load', function () {
-    var id = 0;
+    var price = $('#Amount');
+    var idInc = 0;
+    var sumExpence = 0;
+    var tabItems = [];
     var msgError = new jBox('Modal', {
         content: 'Error budget positive and great than 0',
         //attach: '#btn-budget',
@@ -28,19 +31,30 @@ $(window).on('load', function () {
 
     $('#btn-expense').on('click', function (event) {
         event.preventDefault();
-        if ($('#expense-text').val() == '' || $('#Amount').val() < 0 || $('#Amount').val() == '') {
+        if ($('#expense-text').val() == '' || price.val() < 0 || price.val() == '') {
             console.log($(this));
             msgError.toggle();
         }
         else {
-            $('#expences-price').text($('#Amount').val());
+            sumExpence += parseInt(price.val());
+            $('#expences-price').text(sumExpence);
+            $('#balance-price').text(parseInt($('#budget').val()) - parseInt(price.val()))
+            var expence = $('#expense-text').val();
+            var titleExpense = price.val();
+            console.log(expence, titleExpense);
+            var objItems = {
+                id: idInc++,
+                valeur:  titleExpense,
+                titreExpense: expence
+            }
+            tabItems.push(objItems);
             const tr = $('<tr>');
             const chaine = `
-    <td>${$('#expense-text').val()}</td>
-    <td>${$('#Amount').val()}</td>
+    <td>${objItems.valeur}</td>
+    <td>${objItems.titreExpense}</td>
     <td>
-        <button value="${id++}" class="btn-style edit-color"><i class="fas fa-edit"></i></button>
-        <button value="${id++}" class="btn-style delete-color"><i class="fas fa-trash"></i></button>
+        <button value="${objItems.id}" class="btn-style edit-color"><i class="fas fa-edit"></i></button>
+        <button value="${objItems.id}" class="btn-style delete-color"><i class="fas fa-trash"></i></button>
     </td>`
             tr.html(chaine);
             $('tbody').append(tr);
@@ -49,10 +63,19 @@ $(window).on('load', function () {
     })
     $('tbody').on('click', 'button', function(){
         if($(this).hasClass('edit-color')){
-            console.log($(this).attr('value'));
+            console.log(typeof(sumExpence), sumExpence);
+            var getId = $(this).attr('value');
+            var getElet = tabItems.filter(elet => elet.id == getId)
+            sumExpence -= parseInt(getElet[0].valeur);
+            console.log(sumExpence);
+            $('#expences-price').text(sumExpence);
+            $('#balance-price').text(parseInt($('#balance-price').text()) + parseInt(getElet[0].valeur))
+
         }
         else if($(this).hasClass('delete-color')){
-            console.log($(this).attr('value'));
+            var getId = $(this).attr('value');
+            var getElet = tabItems.filter(elet => elet.id == getId)
+            console.log(getElet[0]);
         }
     })
 
