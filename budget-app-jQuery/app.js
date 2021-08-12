@@ -4,7 +4,7 @@ $(window).on('load', function () {
     var sumExpence = 0;
     var tabItems = [];
     var msgError = new jBox('Modal', {
-        content: 'Error budget positive and great than 0',
+        content: 'check the entered data',
         //attach: '#btn-budget',
         title: 'Error message',
         draggable: 'title',
@@ -31,18 +31,18 @@ $(window).on('load', function () {
 
     $('#btn-expense').on('click', function (event) {
         event.preventDefault();
-        if ($('#expense-text').val() == '' || price.val() < 0 || price.val() == '') {
+        if ($('#expense-text').val() == '' || $('#Amount').val() < 0 || $('#Amount').val() == '') {
             msgError.toggle();
         }
         else {
-            sumExpence += parseInt(price.val());
+            sumExpence += parseInt($('#Amount').val());
             $('#expences-price').text(sumExpence);
-            $('#balance-price').text(parseInt($('#balance-price').text()) - parseInt(price.val()))
-            var expence = price.val();
+            $('#balance-price').text(parseInt($('#balance-price').text()) - parseInt($('#Amount').val()))
+            var expence = $('#Amount').val();
             var titleExpense = $('#expense-text').val();
             var objItems = {
                 id: idInc++,
-                valeur:  expence,
+                valeur: expence,
                 titreExpense: titleExpense
             }
             tabItems.push(objItems);
