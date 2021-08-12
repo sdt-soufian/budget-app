@@ -19,12 +19,12 @@ $(window).on('load', function () {
     $('#btn-budget').on('click', function (event) {
         event.preventDefault();
         if ($('#budget').val() == '' || $('#budget').val() < 0) {
-            console.log($(this));
             msgError.toggle();
         }
         else {
             $('#budget-price').text($('#budget').val());
             $('#balance-price').text($('#budget').val());
+            $('#budget').val('');
         }
 
     })
@@ -32,51 +32,72 @@ $(window).on('load', function () {
     $('#btn-expense').on('click', function (event) {
         event.preventDefault();
         if ($('#expense-text').val() == '' || price.val() < 0 || price.val() == '') {
-            console.log($(this));
             msgError.toggle();
         }
         else {
             sumExpence += parseInt(price.val());
             $('#expences-price').text(sumExpence);
-            $('#balance-price').text(parseInt($('#budget').val()) - parseInt(price.val()))
-            var expence = $('#expense-text').val();
-            var titleExpense = price.val();
-            console.log(expence, titleExpense);
+            $('#balance-price').text(parseInt($('#balance-price').text()) - parseInt(price.val()))
+            var expence = price.val();
+            var titleExpense = $('#expense-text').val();
             var objItems = {
                 id: idInc++,
-                valeur:  titleExpense,
-                titreExpense: expence
+                valeur:  expence,
+                titreExpense: titleExpense
             }
             tabItems.push(objItems);
             const tr = $('<tr>');
             const chaine = `
-    <td>${objItems.valeur}</td>
     <td>${objItems.titreExpense}</td>
+    <td>${objItems.valeur}</td>
     <td>
         <button value="${objItems.id}" class="btn-style edit-color"><i class="fas fa-edit"></i></button>
         <button value="${objItems.id}" class="btn-style delete-color"><i class="fas fa-trash"></i></button>
     </td>`
             tr.html(chaine);
             $('tbody').append(tr);
+            $('#expense-text').val('');
+            price.val('');
         }
 
     })
     $('tbody').on('click', 'button', function(){
-        if($(this).hasClass('edit-color')){
-            console.log(typeof(sumExpence), sumExpence);
+        if($(this).hasClass('delete-color')){
             var getId = $(this).attr('value');
-            var getElet = tabItems.filter(elet => elet.id == getId)
-            sumExpence -= parseInt(getElet[0].valeur);
-            console.log(sumExpence);
-            $('#expences-price').text(sumExpence);
-            $('#balance-price').text(parseInt($('#balance-price').text()) + parseInt(getElet[0].valeur))
-
+            var getElet = getEletFromTab(getId);
+            setPrices(getElet);
+            deleteItem(getId);
+            $(this).parent().parent().remove();
         }
-        else if($(this).hasClass('delete-color')){
+        else if($(this).hasClass('edit-color')){
             var getId = $(this).attr('value');
-            var getElet = tabItems.filter(elet => elet.id == getId)
-            console.log(getElet[0]);
+            var getElet = getEletFromTab(getId);
+            $('#expense-text').val(`${getElet.titreExpense}`);
+            $('#Amount').val(`${getElet.valeur}`);
+            var getElet = getEletFromTab(getId);
+            setPrices(getElet);
+            deleteItem(getId);
+            $(this).parent().parent().remove();
         }
     })
+
+    function getEletFromTab(id){
+        var elet = tabItems.filter(elet => elet.id == id);
+        return elet[0];
+    }
+
+    function setPrices(element){
+        var pBalance = parseInt($('#balance-price').text());
+        sumExpence -= parseInt(element.valeur);
+        pBalance += parseInt(element.valeur);
+        $('#expences-price').text(sumExpence);
+        $('#balance-price').text(pBalance.toString());
+    }
+
+    function deleteItem(indice){
+        var tempList = tabItems.filter(elet => elet.id !== parseInt(indice));
+        tabItems = tempList;
+        console.log(tabItems);
+    }
 
 })
