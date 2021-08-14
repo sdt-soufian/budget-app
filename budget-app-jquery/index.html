@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
         integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.3/dist/jBox.all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
     <title>Budget App</title>
 </head>
 
@@ -19,19 +19,19 @@
             <h2>budget app</h2>
             <span class="msg-error">Error Budget doit etre positive et superieur a zero</span>
             <div class="div-form1">
-                <form>btn-budget
+                <form class="budget-form">
                     <label>Please Enter Your Budget</label>
-                    <input type="number" name="inputNbr" id="budget">
+                    <input type="text" name="budget" id="budget">
                     <span id="message"></span>
                     <button id="btn-budget">Calculate</button>
                 </form>
             </div>
             <div class="div-form2">
-                <form>
+                <form class="expense-form">
                     <label>Please Enter Your Expense</label>
-                    <input type="text" name="" id="expense-text">
+                    <input type="text" name="expense-title" id="expense-title">
                     <label>Please Enter Expense Amount</label>
-                    <input type="number" name="" id="Amount">
+                    <input type="text" name="expense-amount" id="expense-amount">
                     <button id="btn-expense">Add Expense</button>
                 </form>
             </div>
@@ -46,7 +46,7 @@
                 <div class="carte flex">
                     <h4>EXPENCES</h4>
                     <div class="icon"><i class="far fa-credit-card fa-2x"></i></div>
-                    <h3 id="expences-price">0</h3>
+                    <h3 id="expenses-price">0</h3>
                 </div>
                 <div class="carte flex">
                     <h4>BALANCE</h4>
@@ -68,9 +68,10 @@
 
 
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.3/dist/jBox.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/additional-methods.min.js"></script>
     <script src="./app.js"></script>
 </body>
 

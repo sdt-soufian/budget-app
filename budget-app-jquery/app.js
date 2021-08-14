@@ -1,105 +1,170 @@
 $(window).on("load", function () {
-  var price = $("#Amount");
-  var idInc = 0;
-  var sumExpence = 0;
-  var tabItems = [];
-  var msgError = new jBox("Modal", {
-    content: "check the entered data",
-    //attach: '#btn-budget',
-    title: "Error message",
-    draggable: "title",
-    overlay: false,
-    repositionOnOpen: false,
-    repositionOnContent: false,
-    position: {
-      x: 25,
-      y: 10,
+  const $forms = $(".conteneur .information");
+
+  const $services = $(".conteneur .services");
+  const $budgetPrice = $services.find("#budget-price");
+  const $balancePrice = $services.find("#balance-price");
+  const $expensesPrice = $services.find("#expenses-price");
+
+  const $budgetForm = $forms.find(".budget-form");
+  const $budget = $budgetForm.find("#budget");
+
+  const $expenseForm = $forms.find(".expense-form");
+  const $expenseTitle = $expenseForm.find("#expense-title");
+  const $expenseAmount = $expenseForm.find("#expense-amount");
+
+  const $table = $("tbody");
+
+  let sumExpense = 0;
+  let tabItems = [];
+
+  const errorsPanel = (errors) => {
+    new jBox("Notice", {
+      color: "red",
+      title: "Errors",
+      content: `
+        <ul class="errors">
+          ${errors.map(
+            (err) => `
+            <li class="error-item">
+              ${$(err.element).attr("name")} : ${err.message.toLowerCase()}
+            </li>
+          `
+          )}
+        </ul>
+      `,
+      position: {
+        x: "center",
+      },
+    });
+  };
+
+  $.validator.addMethod(
+    "string",
+    function (value, element, param) {
+      return Number.isNaN(parseInt(value));
+    },
+    $.validator.format("Field must be a string")
+  );
+
+  $budgetForm.validate({
+    rules: {
+      budget: {
+        required: true,
+        number: true,
+        min: 0,
+      },
+    },
+    errorPlacement: function (error, element) {
+      return false;
+    },
+    invalidHandler: function (event, validator) {
+      if (validator.numberOfInvalids()) {
+        errorsPanel(validator.errorList);
+      }
+    },
+    submitHandler: function (form) {
+      $budgetPrice.text($budget.val());
+      $balancePrice.text($budget.val());
+      $budget.val("");
     },
   });
 
-  $("#btn-budget").on("click", function (event) {
-    event.preventDefault();
-    if ($("#budget").val() == "" || $("#budget").val() < 0) {
-      msgError.toggle();
-    } else {
-      $("#budget-price").text($("#budget").val());
-      $("#balance-price").text($("#budget").val());
-      $("#budget").val("");
-    }
-  });
+  $expenseForm.validate({
+    rules: {
+      "expense-title": {
+        required: true,
+        string: true,
+      },
+      "expense-amount": {
+        required: true,
+        number: true,
+        min: 0,
+      },
+    },
+    errorPlacement: function (error, element) {
+      return false;
+    },
+    invalidHandler: function (event, validator) {
+      if (validator.numberOfInvalids()) {
+        errorsPanel(validator.errorList);
+      }
+    },
+    submitHandler: function (form) {
+      sumExpense += parseInt($expenseAmount.val());
+      const amount = parseInt($expenseAmount.val());
+      const balance = parseInt($balancePrice.text());
+      const expenseTitle = $expenseTitle.val();
+      const expense = amount;
 
-  $("#btn-expense").on("click", function (event) {
-    event.preventDefault();
-    if (
-      $("#expense-text").val() == "" ||
-      $("#Amount").val() < 0 ||
-      $("#Amount").val() == ""
-    ) {
-      msgError.toggle();
-    } else {
-      sumExpence += parseInt($("#Amount").val());
-      $("#expences-price").text(sumExpence);
-      $("#balance-price").text(
-        parseInt($("#balance-price").text()) - parseInt($("#Amount").val())
-      );
-      var expence = $("#Amount").val();
-      var titleExpense = $("#expense-text").val();
-      var objItems = {
-        id: idInc++,
-        valeur: expence,
-        titreExpense: titleExpense,
+      $expensesPrice.text(sumExpense);
+      $balancePrice.text(balance - amount);
+
+      const row = {
+        value: expense,
+        title: expenseTitle,
       };
-      tabItems.push(objItems);
-      const tr = $("<tr>");
-      const chaine = `
-    <td>${objItems.titreExpense}</td>
-    <td>${objItems.valeur}</td>
-    <td>
-        <button value="${objItems.id}" class="btn-style edit-color"><i class="fas fa-edit"></i></button>
-        <button value="${objItems.id}" class="btn-style delete-color"><i class="fas fa-trash"></i></button>
-    </td>`;
-      tr.html(chaine);
-      $("tbody").append(tr);
-      $("#expense-text").val("");
-      price.val("");
+
+      tabItems.push(row);
+
+      renderTab(tabItems);
+
+      $expenseTitle.val("");
+      $expenseAmount.val("");
+    },
+  });
+
+  $table.on("click", "button", function (event) {
+    const $target = $(this);
+    const targetIdx = $target.parents("tr").index();
+    const row = getTabRow(targetIdx);
+
+    if ($target.hasClass("delete-color")) {
+      handleBalance(row);
+      deleteTabRow(targetIdx);
+      renderTab(tabItems);
+    } else if ($target.hasClass("edit-color")) {
+      $expenseTitle.val(`${row.title}`);
+      $expenseAmount.val(`${row.value}`);
+
+      handleBalance(row);
+      deleteTabRow(targetIdx);
+      renderTab(tabItems);
     }
   });
 
-  $("tbody").on("click", "button", function () {
-    if ($(this).hasClass("delete-color")) {
-      var getId = $(this).attr("value");
-      var getElet = getEletFromTab(getId);
-      setPrices(getElet);
-      deleteItem(getId);
-      $(this).parent().parent().remove();
-    } else if ($(this).hasClass("edit-color")) {
-      var getId = $(this).attr("value");
-      var getElet = getEletFromTab(getId);
-      $("#expense-text").val(`${getElet.titreExpense}`);
-      $("#Amount").val(`${getElet.valeur}`);
-      var getElet = getEletFromTab(getId);
-      setPrices(getElet);
-      deleteItem(getId);
-      $(this).parent().parent().remove();
-    }
-  });
-
-  function getEletFromTab(id) {
-    var elet = tabItems.filter((elet) => elet.id == id);
-    return elet[0];
+  function getTabRow(id) {
+    return tabItems.find((elem, idx) => id === idx);
   }
 
-  function setPrices(element) {
-    var pBalance = parseInt($("#balance-price").text());
-    sumExpence -= parseInt(element.valeur);
-    pBalance += parseInt(element.valeur);
-    $("#expences-price").text(sumExpence);
-    $("#balance-price").text(pBalance.toString());
+  function deleteTabRow(id) {
+    tabItems = tabItems.filter((elem, idx) => idx !== parseInt(id));
   }
 
-  function deleteItem(indice) {
-    var tempList = tabItems.filter((elet) => elet.id !== parseInt(indice));
-    tabItems = tempList;
-    console.log(tabItems);
+  function handleBalance(row) {
+    let balance = parseInt($balancePrice.text());
+
+    sumExpense -= row.value;
+    balance += row.value;
+
+    $expensesPrice.text(sumExpense);
+    $balancePrice.text(balance);
+  }
+
+  function renderTab(rows = []) {
+    const tab = rows.map(
+      (row) => `
+        <tr>
+          <td>${row.title}</td>
+          <td>${row.value}</td>
+          <td>
+            <button class="btn-style edit-color"><i class="fas fa-edit"></i></button>
+            <button class="btn-style delete-color"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+      `
+    );
+
+    $table.html(tab);
   }
 });
