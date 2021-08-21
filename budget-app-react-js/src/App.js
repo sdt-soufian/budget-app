@@ -17,13 +17,23 @@ export class App extends Component {
 
   }
 
+  addRow = (expense, expenseAmount) => {
+    const newItem = {
+      id: Math.floor(Math.random() * 200),
+      expense: expense,
+      expenseAmount: expenseAmount
+    }
+    this.setState({ tab: [...this.state.tab, newItem] })
+    console.log(expense, expenseAmount);
+  }
+
   render() {
     return (
       <div className="container">
         <div className="row mt-4">
           <div className="col-lg-4 col-sm-12">
             <Budget addBudget={this.addBudget} />
-            <Information />
+            <Information addRow={this.addRow} />
           </div>
           <div className="col-lg-8 col-sm-12">
             <div className="row">
@@ -32,7 +42,7 @@ export class App extends Component {
               <BalanceTitle />
             </div>
             <div className="row mt-4">
-              <ExpenseManager />
+              <ExpenseManager tabRow={this.state.tab} />
             </div>
           </div>
         </div>

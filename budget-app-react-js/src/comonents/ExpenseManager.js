@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
+import TabRow from './TabRow'
+
 
 class ExpenseManager extends Component {
     render() {
         return (
             <div className="col-lg">
-                <table className="table table-dark width-100">
-                    <thead>
+                <table className="table width-100">
+                    <thead className="thead-dark">
                         <tr>
                             <th scope="col">Expenses Title</th>
                             <th scope="col">Expenses Value</th>
@@ -13,6 +15,9 @@ class ExpenseManager extends Component {
                         </tr>
                     </thead>
                     <tbody>
+                        {this.props.tabRow.map(elem => (
+                            <TabRow key={elem.id} expense={elem.expense} amount={elem.expenseAmount} />
+                        ))}
                     </tbody>
                 </table>
             </div>
