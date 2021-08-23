@@ -7,7 +7,7 @@ class BalanceTitle extends Component {
                 <div className="text-center">
                     <h3>BALANCE</h3>
                     <i style={{ color: '#7289da' }} className="fas fa-pound-sign fa-3x"></i>
-                    <h3>0</h3>
+                    <h3>{this.props.balancePrice}</h3>
                 </div>
             </div>
         )
