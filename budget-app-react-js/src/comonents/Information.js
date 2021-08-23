@@ -2,32 +2,19 @@ import React, { Component } from 'react'
 
 class Information extends Component {
 
-    state = {
-        expense: '',
-        expenseAmount: ''
-    }
 
-    handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value })
-    }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.addRow(this.state.expense, this.state.expenseAmount);
-        this.setState({ expense: '' })
-        this.setState({ expenseAmount: '' })
-    }
     render() {
         return (
             <div className="my-3 border border-danger rounded-sm p-2">
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.props.handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="">Please Enter Your Expense</label>
                         <input
                             type="text"
-                            name="expense"
-                            value={this.state.expense}
-                            onChange={this.handleChange}
+                            name="titleExpense"
+                            value={this.props.titleExpense}
+                            onChange={this.props.handleChange}
                             className="form-control border-danger"
                             placeholder="Enter your Expense" />
                     </div>
@@ -36,9 +23,9 @@ class Information extends Component {
                         <label htmlFor="">Please Enter Your Expense Amount</label>
                         <input
                             type="text"
-                            name="expenseAmount"
-                            value={this.state.expenseAmount}
-                            onChange={this.handleChange}
+                            name="amount"
+                            value={this.props.amount}
+                            onChange={this.props.handleChange}
                             className="form-control border-danger"
                             placeholder="Enter your Expense Amount" />
                     </div>

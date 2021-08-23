@@ -12,7 +12,7 @@ class Budget extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.addBudget(this.state.price) //????
+        this.props.addBudget(this.state.price)
         this.setState({ price: '' })
     }
     render() {

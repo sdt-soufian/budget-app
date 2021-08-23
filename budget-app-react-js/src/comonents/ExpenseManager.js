@@ -3,6 +3,7 @@ import TabRow from './TabRow'
 
 
 class ExpenseManager extends Component {
+
     render() {
         return (
             <div className="col-lg">
@@ -16,7 +17,12 @@ class ExpenseManager extends Component {
                     </thead>
                     <tbody>
                         {this.props.tabRow.map(elem => (
-                            <TabRow key={elem.id} expense={elem.expense} amount={elem.expenseAmount} />
+                            <TabRow key={elem.id}
+                                expense={elem.expense}
+                                elet={elem}
+                                deleteClick={this.props.deleteClick}
+                                editClick={this.props.editClick}
+                                amount={elem.expenseAmount} />
                         ))}
                     </tbody>
                 </table>
