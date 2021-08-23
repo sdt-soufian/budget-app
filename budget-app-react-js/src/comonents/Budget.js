@@ -17,7 +17,7 @@ class Budget extends Component {
     }
     render() {
         return (
-            <div className="mb-3 border border-success  rounded-sm p-2">
+            <div className="mb-3 border border-success rounded-sm p-2">
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="">Budget</label>
