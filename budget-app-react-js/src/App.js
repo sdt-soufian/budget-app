@@ -18,8 +18,14 @@ export class App extends Component {
   }
 
   addBudget = price => {
-    this.setState({ budget: price })
-    this.setState({ balancePrice: price })
+    if (parseInt(price) < 0 || price === '' || price.search(/\D+/g) !== -1) {
+      console.log('Errors');
+    }
+    else {
+      this.setState({ budget: price })
+      this.setState({ balancePrice: price })
+    }
+
 
   }
 
@@ -51,21 +57,24 @@ export class App extends Component {
       expenseAmount: expenseAmount
     }
     return this.setState({ tab: [...this.state.tab, newItem] })
-    //console.log(expense, expenseAmount);
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.addRow(this.state.titleExpense, this.state.amount);
-    this.setState(prevState => {
-      return { expensePrice: parseInt(prevState.expensePrice) + parseInt(this.state.amount) }
-    })
-    this.setState(prevBalance => {
-      return { balancePrice: parseInt(prevBalance.balancePrice) - parseInt(this.state.amount) }
-    })
-    this.setState({ titleExpense: '' })
-    this.setState({ amount: '' })
-
+    if (this.state.titleExpense === '' || this.state.titleExpense.search(/\D+/g) === -1 || this.state.amount < 0 || this.state.amount === '') {
+      console.log('input Errors');
+    }
+    else {
+      this.addRow(this.state.titleExpense, this.state.amount);
+      this.setState(prevState => {
+        return { expensePrice: parseInt(prevState.expensePrice) + parseInt(this.state.amount) }
+      })
+      this.setState(prevBalance => {
+        return { balancePrice: parseInt(prevBalance.balancePrice) - parseInt(this.state.amount) }
+      })
+      this.setState({ titleExpense: '' })
+      this.setState({ amount: '' })
+    }
   }
 
 
