@@ -5,6 +5,7 @@ import BudgetTitle from './components/BudgetTitle'
 import ExpenseManager from './components/ExpenseManager'
 import ExpenseTitle from './components/ExpenseTitle'
 import Information from './components/Information'
+import Errors from './components/Errors'
 
 export class App extends Component {
   state = {
@@ -14,12 +15,13 @@ export class App extends Component {
     amount: '',
     price: '',
     expensePrice: '0',
-    balancePrice: '0'
+    balancePrice: '0',
+    active: false
   }
 
   addBudget = price => {
     if (parseInt(price) < 0 || price === '' || price.search(/\D+/g) !== -1) {
-      console.log('Errors');
+      this.setState({ active: true })
     }
     else {
       this.setState({ budget: price })
@@ -62,7 +64,7 @@ export class App extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     if (this.state.titleExpense === '' || this.state.titleExpense.search(/\D+/g) === -1 || this.state.amount < 0 || this.state.amount === '') {
-      console.log('input Errors');
+      this.setState({ active: true })
     }
     else {
       this.addRow(this.state.titleExpense, this.state.amount);
@@ -77,6 +79,10 @@ export class App extends Component {
     }
   }
 
+  handleClick = () => {
+    this.setState({ active: false });
+  }
+
 
   render() {
     return (
@@ -87,6 +93,7 @@ export class App extends Component {
             <Information handleChange={this.handleChange} titleExpense={this.state.titleExpense} amount={this.state.amount} handleSubmit={this.handleSubmit} />
           </div>
           <div className="col-lg-8 col-sm-12">
+            <Errors active={this.state.active} handleClick={this.handleClick} />
             <div className="row">
               <BudgetTitle budget={this.state.budget} />
               <ExpenseTitle expensePrice={this.state.expensePrice} />
@@ -97,7 +104,7 @@ export class App extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     )
   }
 }
