@@ -5,7 +5,7 @@ import BudgetTitle from './components/BudgetTitle'
 import ExpenseManager from './components/ExpenseManager'
 import ExpenseTitle from './components/ExpenseTitle'
 import Information from './components/Information'
-import Errors from './components/Errors'
+import { Error, Button } from "./components/Error.style";
 
 
 const App = () => {
@@ -15,8 +15,8 @@ const App = () => {
   const [inputBudget, setInputBudget] = useState('0');
   const [inputExpense, setInputExpense] = useState('');
   const [inputExpenseAmount, setInputExpenseAmount] = useState('');
-  const [errors, setErrors] = useState(false);
   const [tab, setTab] = useState([])
+  const [msgErrors, setMsgErrors] = useState('0')
 
 
   const handleChange = (e) => setInputBudget(e.target.value)
@@ -27,7 +27,7 @@ const App = () => {
 
   const addBudget = price => {
     if (parseInt(price) < 0 || price === '' || price.search(/\D+/g) !== -1) {
-      setErrors(true)
+      setMsgErrors('1')
     }
     else {
       setBudget(price)
@@ -51,7 +51,7 @@ const App = () => {
   const expenseSubmit = (e) => {
     e.preventDefault()
     if (inputExpense === '' || inputExpense.search(/\D+/g) === -1 || inputExpenseAmount < 0 || inputExpenseAmount === '') {
-      setErrors(true)
+      setMsgErrors('1')
     }
     else {
       addExpense(inputExpense, inputExpenseAmount)
@@ -79,7 +79,7 @@ const App = () => {
     deleteExpense(row.id)
   };
 
-  const handleErrorsClick = () => setErrors(false)
+  const handleErrorsClick = () => setMsgErrors('0')
 
 
   return (
@@ -96,7 +96,12 @@ const App = () => {
             expenseSubmit={expenseSubmit} />
         </div>
         <div className="col-lg-8 col-sm-12">
-          <Errors active={errors} handleErrorsClick={handleErrorsClick} />
+          <Error active={msgErrors}>
+            <Button onClick={handleErrorsClick}>
+              <i className="fas fa-times"></i>
+            </Button>
+            Errors try again.....
+          </Error>
           <div className="row">
             <BudgetTitle budget={budget} />
             <ExpenseTitle expense={expense} />

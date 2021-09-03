@@ -24,7 +24,7 @@ const Errors = (props) => {
                 <i className="fas fa-times"></i>
             </button>
             Errors try again....
-        </div>
+        </div >
     )
 }
 
