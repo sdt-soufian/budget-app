@@ -5,115 +5,68 @@ import BudgetTitle from './components/BudgetTitle'
 import ExpenseManager from './components/ExpenseManager'
 import ExpenseTitle from './components/ExpenseTitle'
 import Information from './components/Information'
-import { Error, Button } from "./components/Error.style";
+//import { Error, Button } from "./components/Error.style";
 
+export const TabContext = React.createContext()
+
+export const BudgetContext = React.createContext()
+
+export const ExpenseContext = React.createContext()
+
+export const AmountContext = React.createContext()
+
+export const StateContext = React.createContext()
+
+export const PriceContext = React.createContext()
 
 const App = () => {
-  const [budget, setBudget] = useState('0');
-  const [expense, setExpense] = useState('0');
-  const [balance, setBalance] = useState('0');
-  const [inputBudget, setInputBudget] = useState('0');
-  const [inputExpense, setInputExpense] = useState('');
-  const [inputExpenseAmount, setInputExpenseAmount] = useState('');
   const [tab, setTab] = useState([])
-  const [msgErrors, setMsgErrors] = useState('0')
+  const [expense, setExpense] = useState('')
+  const [amount, setAmount] = useState('')
+  const [stateExpense, setStateExpense] = useState(true)
+  const [budget, setBudget] = useState('')
+  const [price, setPrice] = useState('')
 
 
-  const handleChange = (e) => setInputBudget(e.target.value)
-
-  const handleExpenseChange = (e) => setInputExpense(e.target.value)
-
-  const handleExpenseAmountChange = (e) => setInputExpenseAmount(e.target.value)
-
-  const addBudget = price => {
-    if (parseInt(price) < 0 || price === '' || price.search(/\D+/g) !== -1) {
-      setMsgErrors('1')
-    }
-    else {
-      setBudget(price)
-      setBalance(price)
-      setInputBudget('')
-    }
-
-  }
-
-  const addExpense = (expense, amount) => {
-    const newRow = {
-      id: Math.floor(Math.random() * 200),
-      expense: expense,
-      amount: amount,
-    }
-    setTab(state => state.concat(newRow))
-    setExpense(prev => parseInt(prev) + parseInt(inputExpenseAmount))
-    setBalance(prev => parseInt(prev) - parseInt(inputExpenseAmount))
-  }
-
-  const expenseSubmit = (e) => {
-    e.preventDefault()
-    if (inputExpense === '' || inputExpense.search(/\D+/g) === -1 || inputExpenseAmount < 0 || inputExpenseAmount === '') {
-      setMsgErrors('1')
-    }
-    else {
-      addExpense(inputExpense, inputExpenseAmount)
-      setInputExpense('')
-      setInputExpenseAmount('')
-    }
-  }
-
-  const budgetSubmit = (e) => {
-    e.preventDefault();
-    addBudget(inputBudget);
-  }
-
-  const deleteExpense = id => {
-    setTab(tab.filter(elem => elem.id !== id))
-    const elem = tab.find(elt => elt.id === id);
-    setExpense(prev => parseInt(prev) - parseInt(elem.amount))
-    setBalance(prev => parseInt(prev) + parseInt(elem.amount))
-  };
-
-  const editExpense = row => {
-    console.log(row)
-    setInputExpense(row.expense)
-    setInputExpenseAmount(row.amount)
-    deleteExpense(row.id)
-  };
-
-  const handleErrorsClick = () => setMsgErrors('0')
 
 
   return (
     <div className="container">
-      <div className="row mt-4">
-        <div className="col-lg-4 col-sm-12">
-          <Budget inputBudget={inputBudget} handleChange={handleChange} formSubmit={budgetSubmit} />
+      <TabContext.Provider value={[tab, setTab]}>
+        <ExpenseContext.Provider value={[expense, setExpense]}>
+          <AmountContext.Provider value={[amount, setAmount]}>
+            <StateContext.Provider value={[stateExpense, setStateExpense]}>
+              <BudgetContext.Provider value={[budget, setBudget]}>
+                <PriceContext.Provider value={[price, setPrice]}>
+                  <div className="row mt-4">
+                    <div className="col-lg-4 col-sm-12">
+                      <Budget />
 
-          <Information
-            inputExpense={inputExpense}
-            inputExpenseAmount={inputExpenseAmount}
-            expenseChange={handleExpenseChange}
-            amountChange={handleExpenseAmountChange}
-            expenseSubmit={expenseSubmit} />
-        </div>
-        <div className="col-lg-8 col-sm-12">
-          <Error active={msgErrors}>
-            <Button onClick={handleErrorsClick}>
-              <i className="fas fa-times"></i>
-            </Button>
-            Errors try again.....
-          </Error>
-          <div className="row">
-            <BudgetTitle budget={budget} />
-            <ExpenseTitle expense={expense} />
-            <BalanceTitle budgetBalance={balance} />
-          </div>
-          <div className="row mt-4">
-            <ExpenseManager newRow={tab}
-              deleteExpense={deleteExpense}
-              editExpense={editExpense} />
-          </div>
-        </div>
-      </div>
+                      <Information />
+                    </div>
+                    <div className="col-lg-8 col-sm-12">
+                      {/*<Error active={msgErrors}>
+                      <Button onClick={handleErrorsClick}>
+                        <i className="fas fa-times"></i>
+                      </Button>
+                      Errors try again.....
+  </Error>*/}
+                      <div className="row">
+                        <BudgetTitle />
+                        <ExpenseTitle />
+                        <BalanceTitle />
+                      </div>
+                      <div className="row mt-4">
+                        <ExpenseManager />
+                      </div>
+                    </div>
+                  </div>
+                </PriceContext.Provider>
+              </BudgetContext.Provider>
+            </StateContext.Provider>
+          </AmountContext.Provider>
+        </ExpenseContext.Provider>
+      </TabContext.Provider >
     </div >
   )
 }

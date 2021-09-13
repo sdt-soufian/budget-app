@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { TabContext, ExpenseContext, AmountContext, StateContext } from '../App'
 
 const TabRow = (props) => {
+    const [tab, setTab] = useContext(TabContext)
+    const [expense, setExpense] = useContext(ExpenseContext)
+    const [amount, setAmount] = useContext(AmountContext)
+    const [stateExpense, setStateExpense] = useContext(StateContext)
 
-    const handleDelete = () => props.deleteElement(props.id)
+    const handleDelete = () => {
+        setTab(tab.filter(elem => elem.id !== props.id));
+        setStateExpense(false)
+    }
 
-    const handleEdit = () => props.editElement(props.row)
+    const handleEdit = () => {
+        setExpense(props.expense)
+        setAmount(props.amount)
+    };
 
     return (
         <tr>

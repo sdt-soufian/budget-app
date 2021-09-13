@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import TabRow from './TabRow'
+import { TabContext } from '../App'
 
-const ExpenseManager = (props) => {
+const ExpenseManager = () => {
+    const [tab, setTab] = useContext(TabContext)
 
     return (
         <div className="col-lg">
@@ -14,18 +16,17 @@ const ExpenseManager = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.newRow.length > 0 ? props.newRow.map(elem => (
+                    {tab.length > 0 ? tab.map(elem => (
                         <TabRow key={elem.id}
                             id={elem.id}
                             row={elem}
                             expense={elem.expense}
                             elet={elem}
                             amount={elem.amount}
-                            deleteElement={props.deleteExpense}
-                            editElement={props.editExpense} />
+                        />
                     )) : <tr>
                         <th></th>
-                        <th> now data</th>
+                        <th> <h2>No Data</h2> </th>
                         <th></th>
                     </tr>}
                 </tbody>
